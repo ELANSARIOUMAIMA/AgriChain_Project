@@ -1,0 +1,84 @@
+/* style.css */
+
+/* ----------------------------
+   Reset et styles de base
+---------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #4caf50, #81c784);
+}
+
+/* ----------------------------
+   Card de connexion
+---------------------------- */
+.login-card {
+  background: white;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  width: 350px;
+  text-align: center;
+}
+
+/* Logo */
+.login-card img {
+  width: 100%;
+  height: 100%;
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin-bottom: 25px;
+  color: #333;
+}
+
+/* Champs input */
+input {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: 0.3s;
+}
+
+input:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76,175,80,0.5);
+}
+
+/* Bouton */
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 15px;
+}
+
+button:hover {
+  background-color: #43a047;
+}
+
+/* Petit texte */
+.login-card p {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #777;
+}

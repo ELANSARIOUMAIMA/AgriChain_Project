@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Mes demandes Envoyées</title>
+  <link rel="stylesheet" href="demandes.css">
+  <link rel="stylesheet" href="navbar.css">
+  
+</head>
+<body>
+
+
+<!-- NAVBAR FOURNISSEUR -->
+<div class="navbar">
+  <div class="navbar-left">
+    <img src="images/logo.png" class="logo">
+  </div>
+  <div class="navbar-right">
+    <span id="fournisseurNom"></span>
+    <button onclick="window.location.href='demandes.html'">Mes demandes</button>
+    <!--<button onclick="window.location.href='proposer.html'">Proposer des produits</button>-->
+    <button onclick="window.location.href='historique.html'">Historique</button>
+    <button class="logout-btn" onclick="logout()">Déconnexion</button>
+  </div>
+</div>
+
+
+
+<h2 class="page-title">Mes demandes reçues</h2>
+
+<table id="demandesTable">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Status</th>
+      <th>Détails</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<div id="details">
+  <h3>Détails de la demande sélectionnée</h3>
+  <table id="produitsTable">
+    <thead>
+      <tr>
+        <th>Produit</th>
+        <th>Prix proposé</th>
+        <th>Quantité proposée</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

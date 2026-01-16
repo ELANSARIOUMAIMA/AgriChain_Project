@@ -1,0 +1,41 @@
+/* ===================== HISTORIQUE ===================== */
+.page-title {
+  text-align: center;
+  margin: 20px 0;
+}
+
+#historiqueTable, #produitsHistoriqueTable {
+  width: 80%;
+  margin: 0 auto 20px auto;
+  border-collapse: collapse;
+}
+
+#historiqueTable th, #historiqueTable td,
+#produitsHistoriqueTable th, #produitsHistoriqueTable td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+#historiqueTable th, #produitsHistoriqueTable th {
+  background-color: #28a745;
+  color: white;
+}
+
+#detailsHistorique {
+  width: 80%;
+  margin: 20px auto;
+}
+
+button {
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #28a745;
+  color: white;
+}
+
+button:hover {
+  background-color: #218838;
+}

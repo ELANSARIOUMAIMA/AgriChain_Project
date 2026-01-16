@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Proposer Produits</title>
+  <link rel="stylesheet" href="proposer.css">
+  <link rel="stylesheet" href="navbar.css" class="">
+</head>
+<body>
+
+<!-- NAVBAR FOURNISSEUR -->
+<div class="navbar">
+  <div class="navbar-left">
+    <img src="images/logo.png" class="logo">
+  </div>
+  <div class="navbar-right">
+    <span id="fournisseurNom"></span>
+    <button onclick="window.location.href='demandes.html'">Mes demandes</button>
+ <!--<button onclick="window.location.href='proposer.html'">Proposer des produits</button>-->
+    <button onclick="window.location.href='historique.html'">Historique</button>
+    <button class="logout-btn" onclick="logout()">Déconnexion</button>
+  </div>
+</div>
+
+<h2 class="page-title">Proposer vos produits</h2>
+
+
+
+<table id="produitsTable">
+  <thead>
+    <tr>
+      <th>Produit</th>
+      <th>Prix proposé</th>
+      <th>Quantité Valable</th>
+      
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<div class="buttons">
+  <button onclick="addProduit()">Ajouter un produit</button>
+  <button onclick="submitPropositions()">Envoyer Propositions</button>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
