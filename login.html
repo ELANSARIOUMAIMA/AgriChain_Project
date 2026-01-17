@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>AgriChain - Connexion</title>
+    <link rel="stylesheet" href="login_style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div id="signin-form" class="form-box">
+            <h2>Connexion Client</h2>
+            <input type="text" id="login-name" placeholder="Nom d'utilisateur">
+            <input type="password" id="login-pass" placeholder="Mot de passe">
+            <button onclick="handleSignIn()">Se connecter</button>
+            <p>Pas encore membre ? <a href="#" onclick="toggleForm()">Créer un compte</a></p>
+        </div>
+
+        <div id="signup-form" class="form-box" style="display:none;">
+            <h2>Inscription</h2>
+            <input type="text" id="reg-name" placeholder="Nom complet">
+            <input type="password" id="reg-pass" placeholder="Mot de passe">
+            <input type="text" id="reg-address" placeholder="Adresse">
+            <button onclick="handleSignUp()">S'inscrire</button>
+            <p>Déjà inscrit ? <a href="#" onclick="toggleForm()">Se connecter</a></p>
+        </div>
+    </div>
+    <script src="login_script.js"></script>
+</body>
+</html>
