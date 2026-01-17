@@ -51,7 +51,7 @@ function loadDemandes() {
   const idf = localStorage.getItem("idf");
   if (!idf) {
     alert("Vous devez vous connecter !");
-    location.href = "login.html";
+    location.href = "login_fournisseur.html";
     return;
   }
 
@@ -114,7 +114,7 @@ function loadHistorique() {
   const idf = localStorage.getItem("idf");
   if (!idf) {
     alert("Vous devez vous connecter !");
-    location.href = "login.html";
+    location.href = "login_fournisseur.html";
     return;
   }
 
