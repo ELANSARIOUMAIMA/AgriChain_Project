@@ -54,7 +54,7 @@ async function handleSignIn() {
             localStorage.setItem('clientNom', nomSaisi); 
             
             alert("Connexion réussie !");
-            window.location.href = "index.html"; 
+            window.location.href = "index_client.html"; 
         }else if (res.status === 401) {
             alert("Nom d'utilisateur ou mot de passe incorrect.");
         } else {

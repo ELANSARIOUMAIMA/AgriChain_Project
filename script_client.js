@@ -11,7 +11,7 @@ window.addEventListener('DOMContentLoaded', () => {
         displayElement.innerText = nomClient;
     } else {
         // Redirige vers le login si aucune session n'est trouvée
-        window.location.href = "login.html";
+        window.location.href = "login_client.html";
     }
 
     // 2. Charger le catalogue par défaut
@@ -492,7 +492,7 @@ function closeModal() {
 // Fonction de déconnexion
 function handleLogout() {
     localStorage.clear(); // Efface clientId et clientNom
-    window.location.href = "login.html";
+    window.location.href = "login_client.html";
 }
 // ... vos fonctions loadOrders et refreshDashboardStats sont ici ...
 
