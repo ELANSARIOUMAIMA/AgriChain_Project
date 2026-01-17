@@ -75,7 +75,7 @@ async function loadOrders() {
     
     // Vérification de sécurité locale
     if (!clientId) {
-        window.location.href = "login.html";
+        window.location.href = "login_client.html";
         return;
     }
 
