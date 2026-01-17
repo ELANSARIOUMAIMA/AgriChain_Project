@@ -97,7 +97,6 @@ async function loadOrders() {
             list.innerHTML += `
                 
                 <tr>
-                    <td>${id}</td>
                     <td>${c.DATE_COMMANDE || c.date_commande}</td>
                     <td>${c.STATUT || c.statut}</td>
                     <td><button class="btn-detail" onclick="showOrderDetails(${id})">Voir</button></td>
