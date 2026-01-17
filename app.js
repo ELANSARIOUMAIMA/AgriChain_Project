@@ -105,44 +105,6 @@ function loadDemandes() {
     });
 }
 
-// ---------------------------
-// **CHARGEMENT DES DEMANDES POUR LA PROPOSITION DES PRODUITS
-// ---------------------------
-function loadDemandesForProposition() {
-  const idf = localStorage.getItem("idf");
-  if (!idf) {
-    alert("Vous devez vous connecter !");
-    location.href = "login.html";
-    return;
-  }
-
-  // Récupérer la demande choisie
-  const idDemandeFournisseur = localStorage.getItem("idDemandeFournisseur");
-  if (!idDemandeFournisseur) return;
-
-  fetch(`${BASE_URL}/produits/${idDemandeFournisseur}`)
-    .then(r => r.json())
-    .then(data => {
-      const tbody = document.querySelector("#produitsTable tbody");
-      tbody.innerHTML = "";
-      data.items.forEach(p => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${p.libelle}</td>
-          <td><input type="number" value="${p.prix_propose || 0}" data-id="${p.id_demande_produit}" class="prix"></td>
-          <td><input type="number" value="${p.quantite || 0}" data-id="${p.id_demande_produit}" class="quantite"></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    })
-    .catch(err => console.error(err));
-}
-
-// Automatique si on est sur proposer.html
-if (document.getElementById("produitsTable")) {
-  loadDemandesForProposition();
-}
-
 
 
 // ---------------------------
@@ -199,12 +161,13 @@ function loadDetailsHistorique(idDemandeFournisseur) {
   fetch(`https://oracleapex.com/ords/agrichain/fournisseur/produits/${idDemandeFournisseur}`)
     .then(r => r.json())
     .then(data => {
+      console.log(data);
       const tbody = document.querySelector("#produitsHistoriqueTable tbody");
       tbody.innerHTML = "";
       data.items.forEach(p => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${p.libelle}</td>
+          <td>${p.produit_propose}</td>
           <td>${p.prix_propose}</td>
           <td>${p.quantite}</td>
         `;
@@ -221,58 +184,97 @@ if (document.getElementById("historiqueTable")) {
   loadHistorique();
 }
 
+// ---------------------------
+// CONSTANTES
+// ---------------------------
 
 
-// ---------------------------------------
-// AJOUTER DES PROPOSITIONS ET L'ENVOYER
-// --------------------------------------
-// Ajouter une ligne vide pour un nouveau produit
+// ---------------------------
+// CHARGER LES PRODUITS D'UNE DEMANDE POUR PROPOSER
+// ---------------------------
+function loadDemandesForProposition() {
+  const idDemandeFournisseur = localStorage.getItem("idDemandeFournisseur");
+  if (!idDemandeFournisseur) return;
+
+  fetch(`${BASE_URL}/produits/${idDemandeFournisseur}`)
+    .then(r => r.json())
+    .then(data => {
+      const tbody = document.querySelector("#produitsTable tbody");
+      tbody.innerHTML = "";
+
+      data.items.forEach(p => {
+        const tr = document.createElement("tr");
+        tr.id = `row-${p.id_ligne || "new"}`; // id unique pour chaque ligne
+        tr.innerHTML = `
+          <td><input type="text" class="produit" value="${p.produit_propose || ''}" placeholder="Nom du produit"></td>
+          <td><input type="number" class="prix" value="${p.prix_propose || 0}" min="0"></td>
+          <td><input type="number" class="quantite" value="${p.quantite || 0}" min="0"></td>
+          <td>
+            ${p.id_ligne ? `<button onclick="deleteProduit(${p.id_ligne})">Supprimer</button>` : `<button onclick="this.closest('tr').remove()">Supprimer</button>`}
+          </td>
+          <td>
+            ${p.id_ligne ? `<button onclick="updateProduit(${p.id_ligne})">Modifier</button>` : ""}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    })
+    .catch(err => console.error(err));
+}
+
+// Charger automatiquement si on est sur proposer.html
+if (document.getElementById("produitsTable")) {
+  loadDemandesForProposition();
+}
+
+// ---------------------------
+// AJOUTER UNE NOUVELLE LIGNE VIDE
+// ---------------------------
 function addProduit() {
   const tbody = document.querySelector("#produitsTable tbody");
   const tr = document.createElement("tr");
- tr.innerHTML = `
-  <td><input type="text" placeholder="Nom du produit" class="produit"></td>
-  <td><input type="number" placeholder="Prix" class="prix" min="0"></td>
-  <td><input type="number" placeholder="Quantité" class="quantite" min="0"></td>
-  <td><button onclick="this.closest('tr').remove()">Supprimer</button></td>
-`;
-
+  tr.id = `row-new-${Date.now()}`; // id temporaire unique
+  tr.innerHTML = `
+    <td><input type="text" class="produit" placeholder="Nom du produit"></td>
+    <td><input type="number" class="prix" min="0" placeholder="Prix"></td>
+    <td><input type="number" class="quantite" min="0" placeholder="Quantité"></td>
+    <td><button onclick="this.closest('tr').remove()">Supprimer</button></td>
+    <td></td>
+  `;
   tbody.appendChild(tr);
 }
 
-
-
-
-
-
-//---------------------------------
+// ---------------------------
+// ENVOYER LES NOUVELLES PROPOSITIONS
+// ---------------------------
 function submitPropositions() {
   const tbody = document.querySelector("#produitsTable tbody");
   const rows = tbody.querySelectorAll("tr");
-  const nomsProduits = new Set(); // pour vérifier l'unicité
   const idDemandeFournisseur = localStorage.getItem("idDemandeFournisseur");
+
   if (!idDemandeFournisseur) {
     alert("Aucune demande sélectionnée.");
     return;
   }
+
+  const nomsProduits = new Set();
 
   rows.forEach(row => {
     const produitInput = row.querySelector(".produit");
     const prixInput = row.querySelector(".prix");
     const quantiteInput = row.querySelector(".quantite");
 
+    // Si c'est une ligne existante (id_ligne) on ne fait pas POST ici
+    if (row.id.startsWith("row-") && !row.id.includes("new")) return;
+
     const produit = produitInput.value.trim();
     const prix = parseFloat(prixInput.value);
     const quantite = parseInt(quantiteInput.value);
-   
 
-    // Vérification
-     // Vérifications
     if (!produit) {
       alert("Le nom du produit ne peut pas être vide.");
       throw new Error("Nom produit vide");
     }
-    // Vérifier que le produit n'a pas déjà été ajouté
     if (nomsProduits.has(produit.toLowerCase())) {
       alert(`Le produit "${produit}" a déjà été ajouté !`);
       throw new Error("Produit dupliqué");
@@ -281,7 +283,8 @@ function submitPropositions() {
       alert(`Produit "${produit}" : prix et quantité doivent être supérieurs à 0.`);
       throw new Error("Valeur invalide");
     }
-     nomsProduits.add(produit.toLowerCase());
+
+    nomsProduits.add(produit.toLowerCase());
 
     const payload = {
       id_demande_fournisseur: parseInt(idDemandeFournisseur),
@@ -289,8 +292,6 @@ function submitPropositions() {
       prix_propose: prix,
       quantite: quantite
     };
-
-    // Envoyer au serveur
 
     fetch(`${BASE_URL}/proposer`, {
       method: "POST",
@@ -302,10 +303,127 @@ function submitPropositions() {
     .catch(err => console.error(err));
   });
 
-  alert("Propositions envoyées !");
-  loadDemandesForProposition(); // recharge les produits
+  alert("Nouvelles propositions envoyées !");
+  loadDemandesForProposition();
+}
+
+// ---------------------------
+// MODIFIER UN PRODUIT EXISTANT
+// ---------------------------
+function updateProduit(id_ligne) {
+  const row = document.querySelector(`#row-${id_ligne}`);
+  const produit = row.querySelector(".produit").value.trim();
+  const prix = parseFloat(row.querySelector(".prix").value);
+  const quantite = parseInt(row.querySelector(".quantite").value);
+
+  if (!produit || prix <= 0 || quantite <= 0) {
+    alert("Nom, prix et quantité doivent être valides !");
+    return;
+  }
+
+  const payload = { produit_propose: produit, prix_propose: prix, quantite: quantite };
+
+ fetch(`${BASE_URL}/proposer/${id_ligne}`, {
+  method: "PUT",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(payload)
+})
+.then(r => {
+  if (r.ok) {
+    return r.text(); // <-- retourne du texte si vide
+  } else {
+    throw new Error("Erreur serveur");
+  }
+})
+.then(res => console.log("Réponse:", res))
+.catch(err => console.error(err));
+}
+
+// ---------------------------
+// SUPPRIMER UN PRODUIT EXISTANT
+// ---------------------------
+function deleteProduit(id_ligne) {
+  if (!confirm("Voulez-vous vraiment supprimer ce produit ?")) return;
+
+  fetch(`${BASE_URL}/proposer/${id_ligne}`, { method: "DELETE" })
+    .then(() => {
+      document.querySelector(`#row-${id_ligne}`).remove();
+      alert("Produit supprimé !");
+    })
+    .catch(err => console.error(err));
 }
 
 
 
-  
+// ---------------------------
+// Envoyer toutes les propositions au serveur
+// ---------------------------
+function submitPropositions() {
+  const tbody = document.querySelector("#produitsTable tbody");
+  const rows = tbody.querySelectorAll("tr");
+  const idDemandeFournisseur = localStorage.getItem("idDemandeFournisseur");
+
+  if (!idDemandeFournisseur) {
+    alert("Aucune demande sélectionnée.");
+    return;
+  }
+
+  const nomsProduits = new Set();
+
+  rows.forEach(row => {
+    const produitInput = row.querySelector(".produit");
+    const prixInput = row.querySelector(".prix");
+    const quantiteInput = row.querySelector(".quantite");
+
+    const produit = produitInput.value.trim();
+    const prix = parseFloat(prixInput.value);
+    const quantite = parseInt(quantiteInput.value);
+
+    // Vérifications
+    if (!produit) {
+      alert("Le nom du produit ne peut pas être vide.");
+      throw new Error("Nom produit vide");
+    }
+
+    if (nomsProduits.has(produit.toLowerCase())) {
+      alert(`Le produit "${produit}" a déjà été ajouté !`);
+      throw new Error("Produit dupliqué");
+    }
+
+    if (prix <= 0 || quantite <= 0) {
+      alert(`Produit "${produit}" : prix et quantité doivent être supérieurs à 0.`);
+      throw new Error("Valeur invalide");
+    }
+
+    nomsProduits.add(produit.toLowerCase());
+
+    const payload = {
+      id_demande_fournisseur: parseInt(idDemandeFournisseur),
+      produit_propose: produit,
+      prix_propose: prix,
+      quantite: quantite
+    };
+
+    // Envoi au serveur (POST pour chaque ligne)
+    fetch(`${BASE_URL}/proposer`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+    .then(r => r.json())
+    .then(res => console.log(res))
+    .catch(err => console.error(err));
+  });
+
+  alert("Propositions envoyées !");
+  loadDemandesForProposition(); // Recharge les produits
+}
+
+
+
+
+
+
+
+
+
