@@ -14,7 +14,7 @@ The backend is powered by **Oracle APEX RESTful Services**, while the frontend u
 - **Database**: Oracle Database
 - **Authentication**: Supplier login via REST API
 - **Storage**: Browser `localStorage`
-- **Version Control**: Git & GitHub (Private Repository)
+- **Version Control**: Git & GitHub 
 
 ---
 
