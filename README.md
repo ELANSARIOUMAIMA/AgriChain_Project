@@ -6,6 +6,8 @@ The system allows suppliers to view incoming demands, propose products with pric
 
 The backend is powered by **Oracle APEX RESTful Services**, while the frontend uses **HTML, CSS, and JavaScript**.
 
+Developed by **EL ANSARI Oumaima** & **ESOUBAI Aya** — ENSIAS Students
+
 ---
 
 ## 🏗️ Architecture
