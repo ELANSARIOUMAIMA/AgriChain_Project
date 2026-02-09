@@ -22,10 +22,10 @@ The backend is powered by **Oracle APEX RESTful Services**, while the frontend u
 
 ### 👤 Supplier Side
 - Secure login  
-- View received demands (status: **ENVOYEE**)  
+- View received demands (status: **SENT**)  
 - Propose products (price & quantity)  
 - Modify proposed quantities  
-- View demand history (**VALIDE / ANNULEE**)  
+- View demand history (**APPROVED / CANCELED**)  
 - View detailed product history per demand  
 - Logout  
 
@@ -33,7 +33,7 @@ The backend is powered by **Oracle APEX RESTful Services**, while the frontend u
 - View demand details  
 - Track supplier proposals  
 
-### 🧑‍💼 Director / Agence / Vendeur / Comptable / Facturier Dashboard
+### 🧑‍💼 Director / Agency / Seller / Accounting & Billing Dashboard
 - Implemented using **Oracle APEX**  
 - Validate supplier demands  
 - Cancel supplier demands  
